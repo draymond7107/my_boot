@@ -39,4 +39,13 @@ public class AdminService {
         PageInfo pageInfo = new PageInfo(adminList);
         return pageInfo;
     }
+
+
+    public Admin getByAccount(String account) {
+        AdminExample adminExample = new AdminExample();
+        adminExample.createCriteria().andAccountEqualTo(account);
+        List<Admin> adminList = adminMapper.selectByExample(adminExample);
+        if (adminList.size() == 0) return null;
+        return adminList.get(0);
+    }
 }
