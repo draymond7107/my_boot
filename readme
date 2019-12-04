@@ -1,0 +1,21 @@
+1：spring boot项目创建
+
+2：数据库配置
+    数据库驱动依赖  mysql-connector-java
+    JDBC连接依赖   spring-boot-starter-jdbc
+
+3：连接池
+    依赖：         druid-spring-boot-starter
+
+4：mybatis配置
+    依赖：         mybatis-spring-boot-starter
+    yml配置：
+
+5：
+
+
+
+
+
+问题：maven依赖各个pom含义
+    2：mysql-connector与 JDBC连接 连接的区别，以及不定义版本的区别

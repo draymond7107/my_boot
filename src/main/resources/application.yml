@@ -1,0 +1,25 @@
+server:
+  port: 9001
+
+spring:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/gate_isv?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&autoReconnect=true
+    data-username: root
+    data-password: 123456
+
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial: 2
+      min-idle: 1
+      max-active: 2
+
+
+
+
+
+
+
