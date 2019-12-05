@@ -1,10 +1,12 @@
 server:
   port: 9001
 
+
 spring:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #打印sql
 
+## 数据库连接
   datasource:
     url: jdbc:mysql://localhost:3306/practice?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&autoReconnect=true
     username: root
@@ -17,8 +19,19 @@ spring:
       min-idle: 1
       max-active: 2
 
+## redis配置
+  redis:
+    host: 127.0.0.1
+    database: 8
+    port: 6379
+    # password: admin
 
+
+
+# mybatis配置
 mybatis:
   type-aliases-package: com.draymond.my_boot.entity
   mapper-locations: classpath*:mapper/generalMap/*.xml
+
+
 

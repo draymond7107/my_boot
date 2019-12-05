@@ -48,4 +48,8 @@ public class AdminService {
         if (adminList.size() == 0) return null;
         return adminList.get(0);
     }
+
+    public Admin findById(Integer id){
+     return    adminMapper.selectByPrimaryKey(id);
+    }
 }
