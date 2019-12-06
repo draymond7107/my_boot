@@ -17,7 +17,7 @@ public class AdminCache {
     private final static String ADMIN_ID_CACHE_KEY = "adminId:%s";
     private final static int ADMIN_ID_CACHE_TIME = 2 * 60 * 60;//缓存时间2小时
 
-    private final static String ADMIN_TOKEN_CACHE_KEY = "adminTken_%s";
+    private final static String ADMIN_TOKEN_CACHE_KEY = "adminToken:%s";
     private final static int ADMIN_TOKEN_CACHE_TIME = 2 * 60 * 60;//缓存时间2小时
 
     @Autowired
@@ -60,7 +60,7 @@ public class AdminCache {
         return JsonUtils.toJavaObject(string, Admin.class);
     }
 
-    public void putAdminSession(String token, Admin admin) {
+    public void flushAdminSession(String token, Admin admin) {
         String key = getAdminTokenCacheKey(token);
         baseCache.putString(key, admin, ADMIN_TOKEN_CACHE_TIME);
 
