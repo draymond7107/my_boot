@@ -1,6 +1,10 @@
 package com.draymond.my_boot.spring;
 
+import com.draymond.commons.spring.resolver.RequestArgumentResolver;
 import com.draymond.my_boot.interceptor.LoginInterceptor;
+import com.draymond.my_boot.spring.resolver.LoginArgumentResolver;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -19,7 +23,29 @@ import java.util.List;
  * @Date: 2019/12/5 09:09
  */
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public abstract class WebConfig implements WebMvcConfigurer {
+    protected Log logger = LogFactory.getLog(getClass());
+
+    /**
+     * 拦截器
+     *
+     * @param registry
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**");
+    }
+
+    /**
+     * 跨域
+     *
+     * @param registry
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedOrigins("*").allowCredentials(true).allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600);
+
+    }
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
@@ -52,15 +78,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
     }
 
-    /**
-     * 拦截器
-     *
-     * @param registry
-     */
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**");
-    }
 
     /**
      * 静态资源
@@ -73,21 +90,10 @@ public class WebConfig implements WebMvcConfigurer {
             addResoureHandler：指的是对外暴露的访问路径
             addResourceLocations：指的是内部文件放置的目录
          */
-        registry.addResourceHandler("hello.html").addResourceLocations("classpath:/resources");
-        registry.addResourceHandler("web.html").addResourceLocations("classpath:/resources");
+//        registry.addResourceHandler("hello.html").addResourceLocations("classpath:/resources");
+//        registry.addResourceHandler("web.html").addResourceLocations("classpath:/resources");
     }
 
-
-    /**
-     * 跨域
-     *
-     * @param registry
-     */
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("*").allowCredentials(true).allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600);
-
-    }
 
     /**
      * 页面跳转
@@ -107,8 +113,29 @@ public class WebConfig implements WebMvcConfigurer {
     public void configureViewResolvers(ViewResolverRegistry registry) {
     }
 
+    /**
+     * 参数解析器
+     *
+     * @param resolvers
+     */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        logger.debug("addArgumentResolvers>>");
+        RequestArgumentResolver requestArgumentResolver = this.createRequestArgumentResolver();
+        //客户端拦截ClientInfo对象，提供自动绑定功能
+        if (requestArgumentResolver != null) {
+            logger.debug("添加请求参数拦截注解");
+            resolvers.add(requestArgumentResolver);
+        }
+        LoginArgumentResolver loginArgumentResolver = this.createLoginArgumentResolver();
+        //登录拦截系统
+        if (loginArgumentResolver != null) {
+            logger.debug("添加登录参数拦截注解");
+            resolvers.add(loginArgumentResolver);
+        }
+        logger.debug("添加注解自定义数量:" + resolvers.size());
+        // TODO: 2019/12/8 参数解析器的使用
+        //  super.addArgumentResolvers(resolvers);
     }
 
     @Override
@@ -135,4 +162,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
     }
+
+    protected abstract LoginArgumentResolver createLoginArgumentResolver();
+
+    protected abstract RequestArgumentResolver createRequestArgumentResolver();
 }
