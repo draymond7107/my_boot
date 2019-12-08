@@ -2,10 +2,14 @@ package com.draymond.my_boot.controller;
 
 
 import com.draymond.commons.abs.BaseController;
+import com.draymond.commons.auth.AbsUserSession;
 import com.draymond.commons.spring.JsonResult;
+import com.draymond.commons.spring.annotation.LoginedAuth;
+import com.draymond.my_boot.cache.AdminCache;
 import com.draymond.my_boot.entity.Admin;
 import com.draymond.my_boot.queryvo.BaseQuery;
 import com.draymond.my_boot.service.AdminService;
+import com.draymond.my_boot.session.AdminSession;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("adm/admin")
+@RequestMapping("/adm/admin")
 public class AdminController extends BaseController {
     protected Log logger = LogFactory.getLog(getClass());
 
@@ -30,7 +34,7 @@ public class AdminController extends BaseController {
     private AdminService adminService;
 
     @RequestMapping("/selectAdminPageList")
-    public JsonResult selectAdminPageList(BaseQuery baseQueryVo) {
+    public JsonResult selectAdminPageList(@LoginedAuth AdminSession session , BaseQuery baseQueryVo) {
 
         PageInfo<Admin> pageInfo = adminService.selectPageList(baseQueryVo);
         return sendSuccess(pageInfo);

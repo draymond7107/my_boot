@@ -81,7 +81,7 @@ public abstract class LoginArgumentResolver<T extends AbsUserSession> implements
                 userCache = getUserSession(openId);
             } else {
                 //3、第二部解析auth编码
-                String authorization = request.getHeader("Authorization");
+                String authorization = request.getHeader("adminToken");
                 if (StringUtils.isNotEmpty(authorization)) {
                     try {
                         openId = this.authorizationToToken(authorization);

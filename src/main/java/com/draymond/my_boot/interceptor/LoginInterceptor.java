@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
  * @Auther: ZhangSuchao
  * @Date: 2019/12/5 09:14
  */
-@Configuration
 public class LoginInterceptor implements HandlerInterceptor {
 
     /**
@@ -32,7 +31,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = request.getHeader("adminToken");
         // // TODO: 2019/12/5  从redis查询该token，等等
 
-        return true;
+        return false;
     }
 
     /**

@@ -6,6 +6,8 @@ import com.draymond.my_boot.spring.resolver.LoginArgumentResolver;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -23,6 +25,7 @@ import java.util.List;
  * @Date: 2019/12/5 09:09
  */
 @Configuration
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public abstract class WebConfig implements WebMvcConfigurer {
     protected Log logger = LogFactory.getLog(getClass());
 
@@ -33,7 +36,8 @@ public abstract class WebConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/adm/**");
+
     }
 
     /**
@@ -44,8 +48,33 @@ public abstract class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedOrigins("*").allowCredentials(true).allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600);
-
     }
+
+    /**
+     * 参数解析器
+     *
+     * @param resolvers
+     */
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        logger.debug("addArgumentResolvers>>");
+        RequestArgumentResolver requestArgumentResolver = this.createRequestArgumentResolver();
+        //客户端拦截ClientInfo对象，提供自动绑定功能
+        if (requestArgumentResolver != null) {
+            logger.debug("添加请求参数拦截注解");
+            resolvers.add(requestArgumentResolver);
+        }
+        LoginArgumentResolver loginArgumentResolver = this.createLoginArgumentResolver();
+        //登录拦截系统
+        if (loginArgumentResolver != null) {
+            logger.debug("添加登录参数拦截注解");
+            resolvers.add(loginArgumentResolver);
+        }
+        logger.debug("添加注解自定义数量:" + resolvers.size());
+        // TODO: 2019/12/8 参数解析器的使用
+        //  super.addArgumentResolvers(resolvers);
+    }
+
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
@@ -113,30 +142,7 @@ public abstract class WebConfig implements WebMvcConfigurer {
     public void configureViewResolvers(ViewResolverRegistry registry) {
     }
 
-    /**
-     * 参数解析器
-     *
-     * @param resolvers
-     */
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        logger.debug("addArgumentResolvers>>");
-        RequestArgumentResolver requestArgumentResolver = this.createRequestArgumentResolver();
-        //客户端拦截ClientInfo对象，提供自动绑定功能
-        if (requestArgumentResolver != null) {
-            logger.debug("添加请求参数拦截注解");
-            resolvers.add(requestArgumentResolver);
-        }
-        LoginArgumentResolver loginArgumentResolver = this.createLoginArgumentResolver();
-        //登录拦截系统
-        if (loginArgumentResolver != null) {
-            logger.debug("添加登录参数拦截注解");
-            resolvers.add(loginArgumentResolver);
-        }
-        logger.debug("添加注解自定义数量:" + resolvers.size());
-        // TODO: 2019/12/8 参数解析器的使用
-        //  super.addArgumentResolvers(resolvers);
-    }
+
 
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
