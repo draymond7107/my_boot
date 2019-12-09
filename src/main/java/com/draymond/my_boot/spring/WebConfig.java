@@ -1,10 +1,8 @@
 package com.draymond.my_boot.spring;
 
-import com.draymond.commons.spring.resolver.RequestArgumentResolver;
 import com.draymond.my_boot.cache.AdminCache;
-import com.draymond.my_boot.entity.Admin;
+import com.draymond.my_boot.cache.UserChche;
 import com.draymond.my_boot.interceptor.LoginInterceptor;
-import com.draymond.my_boot.session.AdminSession;
 import com.draymond.my_boot.session.UserSession;
 import com.draymond.my_boot.spring.resolver.LoginArgumentResolver;
 import org.apache.commons.logging.Log;
@@ -31,10 +29,13 @@ import java.util.List;
  */
 @Configuration
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public  class WebConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
     protected Log logger = LogFactory.getLog(getClass());
-@Autowired
-private AdminCache adminCache ;
+    @Autowired
+    private AdminCache adminCache;
+    @Autowired
+    private UserChche userChche;
+
     /**
      * 拦截器
      *
@@ -63,22 +64,20 @@ private AdminCache adminCache ;
      */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        logger.debug("addArgumentResolvers>>");
-        RequestArgumentResolver requestArgumentResolver = this.createRequestArgumentResolver();
-        //客户端拦截ClientInfo对象，提供自动绑定功能
-        if (requestArgumentResolver != null) {
-            logger.debug("添加请求参数拦截注解");
-            resolvers.add(requestArgumentResolver);
-        }
-        LoginArgumentResolver loginArgumentResolver = this.createLoginArgumentResolver();
-        //登录拦截系统
-        if (loginArgumentResolver != null) {
-            logger.debug("添加登录参数拦截注解");
-            resolvers.add(loginArgumentResolver);
-        }
-        logger.debug("添加注解自定义数量:" + resolvers.size());
-        // TODO: 2019/12/8 参数解析器的使用
-        //  super.addArgumentResolvers(resolvers);
+//        logger.debug("addArgumentResolvers>>");
+//        RequestArgumentResolver requestArgumentResolver = this.createRequestArgumentResolver();
+//        //客户端拦截ClientInfo对象，提供自动绑定功能
+//        if (requestArgumentResolver != null) {
+//            logger.debug("添加请求参数拦截注解");
+//            resolvers.add(requestArgumentResolver);
+//        }
+//        LoginArgumentResolver loginArgumentResolver = this.createLoginArgumentResolver();
+//        //登录拦截系统
+//        if (loginArgumentResolver != null) {
+//            logger.debug("添加登录参数拦截注解");
+//            resolvers.add(loginArgumentResolver);
+//        }
+//        logger.debug("添加注解自定义数量:" + resolvers.size());
     }
 
 
@@ -149,7 +148,6 @@ private AdminCache adminCache ;
     }
 
 
-
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
     }
@@ -181,25 +179,16 @@ private AdminCache adminCache ;
      * @return LoginArgumentResolver
      */
     public LoginArgumentResolver createLoginArgumentResolver() {
-        return new LoginArgumentResolver<AdminSession>() {
+        return new LoginArgumentResolver<UserSession>() {
 
-            public AdminSession getUserSession(String token) {
-                return adminCache.getAdminSession(token);
+            public UserSession getUserSession(String token) {
+                return userChche.getUserSession(token);
             }
 
             public String authorizationToToken(String authorization) throws Exception {
                 return authorization;
             }
         };
-    }
-
-    /**
-     * 注入客户端数据解析
-     *
-     * @return RequestArgumentResolver
-     */
-    public RequestArgumentResolver createRequestArgumentResolver() {
-        return new RequestArgumentResolver();
     }
 
 }

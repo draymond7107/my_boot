@@ -4,8 +4,8 @@ import com.draymond.commons.auth.AbsAdminSession;
 import com.draymond.commons.auth.AbsUserSession;
 import com.draymond.commons.constants.Constants;
 import com.draymond.commons.exception.SysException;
-import com.draymond.commons.spring.annotation.LoginAuth;
-import com.draymond.commons.spring.annotation.LoginedAuth;
+import com.draymond.my_boot.spring.annotation.LoginAuth;
+import com.draymond.my_boot.spring.annotation.LoginedAuth;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -81,7 +81,7 @@ public abstract class LoginArgumentResolver<T extends AbsUserSession> implements
                 userCache = getUserSession(openId);
             } else {
                 //3、第二部解析auth编码
-                String authorization = request.getHeader("adminToken");
+                String authorization = request.getHeader("userToken");
                 if (StringUtils.isNotEmpty(authorization)) {
                     try {
                         openId = this.authorizationToToken(authorization);

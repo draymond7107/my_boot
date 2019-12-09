@@ -1,7 +1,6 @@
 package com.draymond.my_boot.session;
 
 import com.draymond.commons.auth.AbsUserSession;
-import com.draymond.my_boot.entity.Admin;
 
 /**
  * @Auther: ZhangSuchao
@@ -16,4 +15,5 @@ public class UserSession extends AbsUserSession {
     public void setToken(String token) {
         this.token = token;
     }
+
 }

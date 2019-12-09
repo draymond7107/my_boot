@@ -8,7 +8,7 @@ import com.draymond.my_boot.entity.Admin;
  * @Auther: ZhangSuchao
  * @Date: 2019/12/8 16:09
  */
-public class AdminSession extends AbsUserSession {
+public class AdminSession extends AbsAdminSession {
     private String token;
 
     public AdminSession() {
