@@ -1,10 +1,15 @@
 package com.draymond.my_boot.spring;
 
 import com.draymond.commons.spring.resolver.RequestArgumentResolver;
+import com.draymond.my_boot.cache.AdminCache;
+import com.draymond.my_boot.entity.Admin;
 import com.draymond.my_boot.interceptor.LoginInterceptor;
+import com.draymond.my_boot.session.AdminSession;
+import com.draymond.my_boot.session.UserSession;
 import com.draymond.my_boot.spring.resolver.LoginArgumentResolver;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -26,9 +31,10 @@ import java.util.List;
  */
 @Configuration
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public abstract class WebConfig implements WebMvcConfigurer {
+public  class WebConfig implements WebMvcConfigurer {
     protected Log logger = LogFactory.getLog(getClass());
-
+@Autowired
+private AdminCache adminCache ;
     /**
      * 拦截器
      *
@@ -169,7 +175,31 @@ public abstract class WebConfig implements WebMvcConfigurer {
     public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
     }
 
-    protected abstract LoginArgumentResolver createLoginArgumentResolver();
+    /**
+     * 注入获取登录解析
+     *
+     * @return LoginArgumentResolver
+     */
+    public LoginArgumentResolver createLoginArgumentResolver() {
+        return new LoginArgumentResolver<UserSession>() {
 
-    protected abstract RequestArgumentResolver createRequestArgumentResolver();
+            public AdminSession getUserSession(String token) {
+                return adminCache.getAdminSession(token);
+            }
+
+            public String authorizationToToken(String authorization) throws Exception {
+                return authorization;
+            }
+        };
+    }
+
+    /**
+     * 注入客户端数据解析
+     *
+     * @return RequestArgumentResolver
+     */
+    public RequestArgumentResolver createRequestArgumentResolver() {
+        return new RequestArgumentResolver();
+    }
+
 }

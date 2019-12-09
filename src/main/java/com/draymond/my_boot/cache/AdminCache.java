@@ -4,6 +4,7 @@ import com.draymond.commons.utils.JsonUtils;
 import com.draymond.commons.utils.StringUtils;
 import com.draymond.my_boot.entity.Admin;
 import com.draymond.my_boot.service.AdminService;
+import com.draymond.my_boot.session.AdminSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -51,18 +52,19 @@ public class AdminCache {
     }
 
 
-    public Admin getAdminSession(String token) {
+    public AdminSession getAdminSession(String token) {
         String key = getAdminTokenCacheKey(token);
         String string = baseCache.getString(key);
         if (StringUtils.isEmpty(string)) {
             return null;
         }
-        return JsonUtils.toJavaObject(string, Admin.class);
+        return JsonUtils.toJavaObject(string, AdminSession.class);
     }
 
     public void flushAdminSession(String token, Admin admin) {
         String key = getAdminTokenCacheKey(token);
-        baseCache.putString(key, admin, ADMIN_TOKEN_CACHE_TIME);
+        AdminSession adminSession =new AdminSession(token,admin);
+        baseCache.putString(key, adminSession, ADMIN_TOKEN_CACHE_TIME);
 
         flushAdmin(admin);
     }
