@@ -6,7 +6,6 @@ import com.draymond.commons.utils.StringUtils;
 import com.draymond.my_boot.cache.AdminCache;
 import com.draymond.my_boot.session.AdminSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
