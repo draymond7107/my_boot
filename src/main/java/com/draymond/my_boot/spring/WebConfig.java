@@ -181,7 +181,7 @@ private AdminCache adminCache ;
      * @return LoginArgumentResolver
      */
     public LoginArgumentResolver createLoginArgumentResolver() {
-        return new LoginArgumentResolver<UserSession>() {
+        return new LoginArgumentResolver<AdminSession>() {
 
             public AdminSession getUserSession(String token) {
                 return adminCache.getAdminSession(token);
