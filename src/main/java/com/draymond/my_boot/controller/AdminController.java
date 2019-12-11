@@ -8,6 +8,7 @@ import com.draymond.my_boot.queryvo.BaseQuery;
 import com.draymond.my_boot.service.AdminService;
 import com.draymond.my_boot.session.AdminSession;
 import com.draymond.my_boot.spring.annotation.LoginedAuth;
+import com.draymond.my_boot.spring.exception.ErrorException;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("/adm/admin")
+@RequestMapping("/admin")
 public class AdminController extends BaseController {
     protected Log logger = LogFactory.getLog(getClass());
 
@@ -32,10 +33,11 @@ public class AdminController extends BaseController {
     private AdminService adminService;
 
     @RequestMapping("/selectAdminPageList")
-    public JsonResult selectAdminPageList(@LoginedAuth AdminSession session , BaseQuery baseQueryVo) {
+    public JsonResult selectAdminPageList(@LoginedAuth AdminSession session, BaseQuery baseQueryVo) throws Exception {
 
         PageInfo<Admin> pageInfo = adminService.selectPageList(baseQueryVo);
-        return sendSuccess(pageInfo);
+        throw new ErrorException("fff");
+        //return sendSuccess(pageInfo);
     }
 
 

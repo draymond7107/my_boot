@@ -4,6 +4,7 @@ import com.draymond.my_boot.cache.AdminCache;
 import com.draymond.my_boot.cache.UserChche;
 import com.draymond.my_boot.interceptor.LoginInterceptor;
 import com.draymond.my_boot.session.UserSession;
+import com.draymond.my_boot.spring.exception.MyExceptionResolver;
 import com.draymond.my_boot.spring.resolver.LoginArgumentResolver;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,6 +24,8 @@ import java.util.List;
 /**
  * WebMvcConfigurer配置类其实是Spring内部的一种配置方式
  * 官方推荐直接实现WebMvcConfigurer或者直接继承WebMvcConfigurationSupport
+ * <p>
+ * https://www.codercto.com/a/54069.html
  *
  * @Auther: ZhangSuchao
  * @Date: 2019/12/5 09:09
@@ -58,7 +61,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     /**
-     * 参数解析器
+     * 添加自定义方法参数处理器
      *
      * @param resolvers
      */
@@ -80,13 +83,17 @@ public class WebConfig implements WebMvcConfigurer {
 //        logger.debug("添加注解自定义数量:" + resolvers.size());
     }
 
-
+    /**
+     * 配置路由请求规则
+     *
+     * @param configurer
+     */
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
     }
 
     /**
-     * 配置内容裁决的一些参数
+     * 内容协商配置
      *
      * @param configurer
      */
@@ -108,13 +115,18 @@ public class WebConfig implements WebMvcConfigurer {
 
     }
 
+    /**
+     * 注册自定义转化器
+     *
+     * @param registry
+     */
     @Override
     public void addFormatters(FormatterRegistry registry) {
     }
 
 
     /**
-     * 静态资源
+     * 资源处理
      *
      * @param registry
      */
@@ -130,7 +142,7 @@ public class WebConfig implements WebMvcConfigurer {
 
 
     /**
-     * 页面跳转
+     * 视图跳转控制器
      *
      * @param registry
      */
@@ -139,7 +151,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     /**
-     * 视图解析器
+     * 配置视图解析
      *
      * @param registry
      */
@@ -147,13 +159,17 @@ public class WebConfig implements WebMvcConfigurer {
     public void configureViewResolvers(ViewResolverRegistry registry) {
     }
 
-
+    /**
+     * 添加自定义返回结果处理器
+     *
+     * @param handlers
+     */
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
     }
 
     /**
-     * 信息转换器
+     * 配置消息转换器。重载会覆盖默认注册的HttpMessageConverter
      *
      * @param converters
      */
@@ -161,16 +177,35 @@ public class WebConfig implements WebMvcConfigurer {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
     }
 
+    /**
+     * 配置消息转换器 仅添加一个自定义的HttpMessageConverter.
+     *
+     * @param converters
+     */
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
     }
 
+    /**
+     * 配置异常转换器
+     *
+     * @param resolvers
+     */
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+        resolvers.add(new MyExceptionResolver());
     }
 
+
+    /**
+     * 添加异常转化器
+     *
+     * @param resolvers
+     */
     @Override
     public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+        // resolvers.add(new MyExceptionResolver());
+        //   为什么使用这个不起作用
     }
 
     /**
@@ -191,4 +226,13 @@ public class WebConfig implements WebMvcConfigurer {
         };
     }
 
+    /*
+    使用@EnableWebMvc注解 等于 扩展了WebMvcConfigurationSupport，但是没有重写任何方法
+    使用“extends WebMvcConfigurationSupport”方式（需要添加@EnableWebMvc），会屏蔽掉springBoot的@EnableAutoConfiguration中的设置
+    使用“implement WebMvcConfigurer”可以配置自定义的配置，同时也使用了@EnableAutoConfiguration中的设置
+    使用“implement WebMvcConfigurer + @EnableWebMvc”，会屏蔽掉springBoot的@EnableAutoConfiguration中的设置
+    这里的“@EnableAutoConfiguration中的设置”是指，读取 application.properties 或 application.yml 文件中的配置。
+
+    所以，如果需要使用springBoot的@EnableAutoConfiguration中的设置，那么就只需要“implement WebMvcConfigurer”即可。如果，需要自己扩展同时不使用@EnableAutoConfiguration中的设置，可以选择另外的方式。
+     */
 }
