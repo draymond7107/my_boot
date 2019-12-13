@@ -2,6 +2,7 @@ package com.draymond.my_boot.spring.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,12 +19,16 @@ public class MyExceptionResolver implements HandlerExceptionResolver {
     public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception ex) {
         // 异常处理，例如将异常信息存储到数据库
         //  exceptionLogDao.save(ex);
-        ModelAndView modelAndView = new ModelAndView("errorPage");
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.addObject("userName", "zsc");
+        modelAndView.addObject("sex", "M");
+        modelAndView.addObject("email", "draymond7107@sina.com");
+        modelAndView.setStatus(HttpStatus.NOT_IMPLEMENTED);
+
 
         if (ex instanceof ErrorException) {
             //--------
-            modelAndView.setStatus(HttpStatus.NOT_IMPLEMENTED);
-            modelAndView.setViewName("error");
         }
 
         // 视图显示专门的错误页
