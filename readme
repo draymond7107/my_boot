@@ -25,12 +25,14 @@
          HandlerMethodArgumentResolver
             自定义注解
 
-
-
     5.4
     HttpServletRequest 的使用
     HttpServletResponse 的使用
      详见 http项目
+6：全局异常处理
+    GlobalExceptionHandle
+        两个注解：    @RestControllerAdvice
+                     @ExceptionHandler(Exception.class)
 
 6:reids
     pom依赖
@@ -56,8 +58,8 @@
 
 
 问题：maven依赖各个pom含义
-    2：mysql-connector与 JDBC连接 连接的区别，以及不定义版本的区别
-
+    1：mysql-connector与 JDBC连接 连接的区别，以及不定义版本的区别
+    2: MyExceptionResolver ModelAndView使用，前后端分离的项目怎么用
 
 踩坑：
     1：数据库账号密码配置

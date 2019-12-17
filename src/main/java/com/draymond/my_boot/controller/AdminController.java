@@ -8,7 +8,6 @@ import com.draymond.my_boot.queryvo.BaseQuery;
 import com.draymond.my_boot.service.AdminService;
 import com.draymond.my_boot.session.AdminSession;
 import com.draymond.my_boot.spring.annotation.LoginedAuth;
-import com.draymond.my_boot.spring.exception.ErrorException;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,9 +35,7 @@ public class AdminController extends BaseController {
     public JsonResult selectAdminPageList(@LoginedAuth AdminSession session, BaseQuery baseQueryVo) throws Exception {
 
         PageInfo<Admin> pageInfo = adminService.selectPageList(baseQueryVo);
-        throw new ErrorException("fff");
-        //return sendSuccess(pageInfo);
+        int i = 5 / 0;
+        return sendSuccess(pageInfo);
     }
-
-
 }

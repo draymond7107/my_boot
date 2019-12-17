@@ -63,7 +63,7 @@ public class BaseCache {
     }
 
     public boolean expire(String key, int timeout) {
-        return redisTemplate.expire(key, timeout, TimeUnit.MINUTES);
+        return this.expire(key, timeout, TimeUnit.MINUTES);
     }
 
     public boolean expire(String key, int timeout, TimeUnit timeUnit) {

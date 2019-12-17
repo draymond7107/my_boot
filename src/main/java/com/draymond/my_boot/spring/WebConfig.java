@@ -2,9 +2,8 @@ package com.draymond.my_boot.spring;
 
 import com.draymond.my_boot.cache.AdminCache;
 import com.draymond.my_boot.cache.UserChche;
-import com.draymond.my_boot.interceptor.LoginInterceptor;
 import com.draymond.my_boot.session.UserSession;
-import com.draymond.my_boot.spring.exception.MyExceptionResolver;
+import com.draymond.my_boot.spring.interceptor.LoginInterceptor;
 import com.draymond.my_boot.spring.resolver.LoginArgumentResolver;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -193,7 +192,7 @@ public class WebConfig implements WebMvcConfigurer {
      */
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-        resolvers.add(new MyExceptionResolver());
+      //  resolvers.add(new MyExceptionResolver());
     }
 
 

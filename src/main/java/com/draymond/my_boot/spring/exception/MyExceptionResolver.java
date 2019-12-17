@@ -2,7 +2,6 @@ package com.draymond.my_boot.spring.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * @Auther: ZhangSuchao
  * @Date: 2019/12/11 18:43
  */
-@Component
+//@Component
 public class MyExceptionResolver implements HandlerExceptionResolver {
     @Override
     public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception ex) {
@@ -26,13 +25,12 @@ public class MyExceptionResolver implements HandlerExceptionResolver {
         modelAndView.addObject("email", "draymond7107@sina.com");
         modelAndView.setStatus(HttpStatus.NOT_IMPLEMENTED);
 
+        modelAndView.setViewName("index.html");
 
         if (ex instanceof ErrorException) {
             //--------
         }
-
         // 视图显示专门的错误页
-
         return modelAndView;
     }
 }

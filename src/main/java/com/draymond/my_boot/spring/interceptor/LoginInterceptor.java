@@ -1,4 +1,4 @@
-package com.draymond.my_boot.interceptor;
+package com.draymond.my_boot.spring.interceptor;
 
 import com.draymond.commons.constants.Constants;
 import com.draymond.commons.spring.SpringContext;
