@@ -32,7 +32,7 @@ public class AdminController extends BaseController {
     private AdminService adminService;
 
     @RequestMapping("/selectAdminPageList")
-    public JsonResult selectAdminPageList(@LoginedAuth AdminSession session, BaseQuery baseQueryVo) throws Exception {
+    public JsonResult selectAdminPageList(@LoginedAuth AdminSession session, BaseQuery baseQueryVo) {
 
         PageInfo<Admin> pageInfo = adminService.selectPageList(baseQueryVo);
         int i = 5 / 0;

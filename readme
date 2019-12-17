@@ -29,17 +29,31 @@
     HttpServletRequest 的使用
     HttpServletResponse 的使用
      详见 http项目
+
+
 6：全局异常处理
     GlobalExceptionHandle
         两个注解：    @RestControllerAdvice
                      @ExceptionHandler(Exception.class)
 
-6:reids
+7:reids
     pom依赖
     yml配置
     注入bean
      redis使用 com.draymond.my_boot.cache
      redis 分层储存
+        key使用 “:”，redis自动分层
+
+
+8:线程池
+    注入 ThreadPoolFactory
+
+
+9:队列
+
+
+
+
 
 7:消息
 8：检索
